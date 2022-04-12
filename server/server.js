@@ -19,8 +19,6 @@ const startServer = async () => {
     context: authMiddleware 
   });
 
-    await server.start();
-
     server.applyMiddleware({ app });
   
     console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
@@ -34,6 +32,11 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 
 //might need to delete
 app.use(routes);
