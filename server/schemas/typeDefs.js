@@ -17,10 +17,12 @@ type Book {
 }
 
 type Query {
+    me(_id: ID!): User
     users: [User]
 }
 
 type Mutation {
+    login(email: String!, password: String!): User
     addUser(username: String!, email: String!, password: String!): User
 }
 
