@@ -4,9 +4,14 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        me: async (parent, { _id }) => {
-            return await User.findOne({ _id })
-            //still gotta add context.user or whatever and authentication error
+        me: async (parent, args, context) => {
+            if (context.user){
+            const userData = User.findOne({ _id: context.user._id })
+            .select('-__v -password');
+
+            return userData
+            }
+            throw new AuthenticationError('Not logged in!')
         },
         
         users: async () => {
@@ -35,16 +40,17 @@ const resolvers = {
             const token = signToken(user);
             return { token, user};
         },
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, {bookId, description, title, image, link}, context) => {
             if (context.user) {
-                const book = await Book.create({ ...args });
 
-                await User.findByIdAndUpdate(
+                const updatedUser = await User
+                .findOneAndUpdate(
                     { _id: context.user._id },
-                    { $push: {savedBooks: {...book}  } },
+                    { $addToSet: {savedBooks: { bookId, description, title, image, link}  } },
                     { new: true }
                 );
-                return book
+
+                return updatedUser
             }
             throw new AuthenticationError('You need to be logged in!')
         }
