@@ -11,9 +11,11 @@ type User {
 
 type Book {
     bookId: ID
-    authors: String
+    authors: [String]
     description: String
-    title: String
+    title: String!
+    image: String
+    link: String
 }
 
 type Query {
@@ -25,6 +27,7 @@ type Query {
 type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
+    saveBook(bookId: ID, description: String, title: String, image: String, link: String): Auth
 }
 
 type Auth {
