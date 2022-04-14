@@ -5,7 +5,6 @@ const { ApolloServer } = require('apollo-server-express');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
 
-//might not need this?
 const routes = require('./routes');
 
 const app = express();
@@ -37,8 +36,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-
-//might need to delete
 app.use(routes);
 
 db.once('open', () => {
