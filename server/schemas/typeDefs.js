@@ -19,10 +19,11 @@ type Book {
 type Query {
     me(_id: ID!): User
     users: [User]
+    user(username: String!): User
 }
 
 type Mutation {
-    login(email: String!, password: String!): User
+    login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): User
 }
 
