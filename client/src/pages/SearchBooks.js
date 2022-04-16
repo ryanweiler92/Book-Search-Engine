@@ -9,6 +9,8 @@ import { QUERY_USER } from '../utils/queries'
 import { SAVE_BOOK } from '../utils/mutations'
 
 const SearchBooks = () => {
+  const [bookSave, { error }] = useMutation(SAVE_BOOK);
+
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
   // create state for holding our search field data
@@ -64,22 +66,29 @@ const SearchBooks = () => {
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
+    console.log(bookToSave.authors, bookToSave.authors[0], bookToSave.bookId, bookToSave.title, token)
+
     if (!token) {
       return false;
     }
 
-    const [bookSave] = useMutation(SAVE_BOOK);
-
-    
-
-
-
     try {
-      const response = await saveBook(bookToSave, token);
+      // const response = await saveBook(bookToSave, token);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+     const response = await bookSave({
+        variables: {bookId: bookToSave.bookId, 
+                    authors: bookToSave.authors,
+                    description: bookToSave.description,
+                    title: bookToSave.title,
+                    image: bookToSave.image,
+                    link: " "},
+        headers: {
+          // 'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`
+        }
+      });
+
+      console.log(response)
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
