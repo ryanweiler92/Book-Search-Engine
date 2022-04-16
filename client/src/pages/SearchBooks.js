@@ -48,8 +48,9 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: book.volumeInfo?.infoLink || ''
       }));
-
+      console.log(items)
       setSearchedBooks(bookData);
       setSearchInput('');
     } catch (err) {
@@ -77,11 +78,11 @@ const SearchBooks = () => {
 
      const response = await bookSave({
         variables: {bookId: bookToSave.bookId, 
-                    authors: bookToSave.authors,
+                    authors: [...bookToSave.authors],
                     description: bookToSave.description,
                     title: bookToSave.title,
                     image: bookToSave.image,
-                    link: " "},
+                    link: bookToSave.link},
         headers: {
           // 'Content-Type': 'application/json',
           authorization: `Bearer ${token}`
