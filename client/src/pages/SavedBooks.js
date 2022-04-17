@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
@@ -14,10 +14,6 @@ const SavedBooks = () => {
 
   const [removeBook] = useMutation(REMOVE_BOOK)
 
-  //meaningless useState to test re-rendering componenet SEE line 34
-  const [bookDeleted, setBookDeleted] = useState({})
-
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
     if (!token) {
@@ -28,10 +24,7 @@ const SavedBooks = () => {
         variables: {bookId: bookId},
         headers: {authorization: `Bearer ${token}`}
       });
-      // upon success, remove book's id from localStorage
-      
       removeBookId(bookId);
-      setBookDeleted({bookId})
     } catch (err) {
       console.error(err);
     }

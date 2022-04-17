@@ -46,6 +46,8 @@ mutation saveBook($bookId: ID,
           bookId
           authors
           image
+          title
+          link
       }
     }
   }
@@ -56,10 +58,13 @@ mutation removeBook($bookId: ID!){
     removeBook(bookId: $bookId){
         username
         email
+        _id
         savedBooks{
           bookId
           authors
           image
+          title
+          link
         }
     }
   }
