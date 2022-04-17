@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
@@ -14,19 +13,15 @@ const SavedBooks = () => {
   // use this to determine if `useEffect()` hook needs to run again
   // const userDataLength = Object.keys(userData).length;
 
-    const [userData, { loading, error, data }] = useQuery(GET_ME)
-
-
-  function aQueryIGuess(){
-    return userData
-  }
-
-  aQueryIGuess();
+  const { data: userData } = useQuery(GET_ME)
 
   const user = userData?.me || {};
 
   console.log(user)
-  console.log(userData)
+  console.log(user.savedBooks)
+  // console.log(user.savedBooks[0].title)
+
+
 
   const [removeBook] = useMutation(REMOVE_BOOK)
   
@@ -93,13 +88,13 @@ const SavedBooks = () => {
         </Container>
       </Jumbotron>
       <Container>
-        <h2>
+        {/* <h2>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
-        </h2>
+        </h2> */}
         <CardColumns>
-          {userData.savedBooks.map((book) => {
+          {/* {userData.savedBooks.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
@@ -113,7 +108,7 @@ const SavedBooks = () => {
                 </Card.Body>
               </Card>
             );
-          })}
+          })} */}
         </CardColumns>
       </Container>
     </>
