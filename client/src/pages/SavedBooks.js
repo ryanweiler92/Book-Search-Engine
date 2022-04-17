@@ -14,6 +14,7 @@ const SavedBooks = () => {
 
   const [removeBook] = useMutation(REMOVE_BOOK)
 
+  //meaningless useState to test re-rendering componenet SEE line 34
   const [bookDeleted, setBookDeleted] = useState({})
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
