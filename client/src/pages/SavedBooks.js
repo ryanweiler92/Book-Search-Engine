@@ -10,35 +10,32 @@ const SavedBooks = () => {
 
   const { loading, error, data } = useQuery(GET_ME)
 
-  const user = data?.me || {};
+  const userData = data?.me || {};
 
   const [removeBook] = useMutation(REMOVE_BOOK)
+
+  const [bookDeleted, setBookDeleted] = useState('')
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-
     if (!token) {
       return false;
     }
-
     try {
-      const response = await removeBook(bookId);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const updatedUser = await response.json();
-      // setUserData(updatedUser);
+      const response = await removeBook({
+        variables: {bookId: bookId},
+        headers: {authorization: `Bearer ${token}`}
+      });
       // upon success, remove book's id from localStorage
+      
       removeBookId(bookId);
+      setBookDeleted(bookId)
     } catch (err) {
       console.error(err);
     }
   };
 
-  // if data isn't here yet, say so
   if (loading) {
     return <h2>LOADING...</h2>;
   }
@@ -52,12 +49,12 @@ const SavedBooks = () => {
       </Jumbotron>
       <Container>
         <h2>
-          {user.savedBooks?.length
-            ? `Viewing ${user.savedBooks?.length} saved ${user.savedBooks?.length === 1 ? 'book' : 'books'}:`
+          {userData.savedBooks?.length
+            ? `Viewing ${userData.savedBooks?.length} saved ${userData.savedBooks?.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <CardColumns>
-          {user.savedBooks?.map((book) => {
+          {userData.savedBooks?.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}

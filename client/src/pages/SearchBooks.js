@@ -9,7 +9,6 @@ import { SAVE_BOOK } from '../utils/mutations'
 const SearchBooks = () => {
   const [bookSave] = useMutation(SAVE_BOOK);
 
-
   const [searchedBooks, setSearchedBooks] = useState([]);
 
   const [searchInput, setSearchInput] = useState('');
@@ -44,7 +43,6 @@ const SearchBooks = () => {
         image: book.volumeInfo.imageLinks?.thumbnail || '',
         link: book.volumeInfo?.infoLink || ''
       }));
-      console.log(items)
       setSearchedBooks(bookData);
       setSearchInput('');
     } catch (err) {
@@ -58,14 +56,11 @@ const SearchBooks = () => {
 
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-    console.log(bookToSave.authors, bookToSave.authors[0], bookToSave.bookId, bookToSave.title, token)
-
     if (!token) {
       return false;
     }
 
     try {
-
      const response = await bookSave({
         variables: {bookId: bookToSave.bookId, 
                     authors: [...bookToSave.authors],
